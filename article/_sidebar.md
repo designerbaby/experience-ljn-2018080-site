@@ -25,3 +25,5 @@
     * [Don't make me think](/other/link)
 * Emmet 📚
     * [Emmet 语法](/Emmet/link)
+* base64 📚
+    * [带你走进base64的世界](/base64/link)
