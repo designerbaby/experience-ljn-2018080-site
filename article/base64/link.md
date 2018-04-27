@@ -13,7 +13,7 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
 
     <img src="images/base64/shuzidianlu.jpeg"> 
 
-   - Base64最早是用来解决电子邮件的传输问题。传统的电子邮件是1982定下技术规范的，该规范的一个重要预留点,就是规定电子邮件只能使用ASCII可打印字符。而ASCII码的128~255都是不可见字符。在网络上交换数据的时候，经过不同路由设备,由于不同的设备对字符的处理方式有一些不同，就很有可能被处理错误,不利于传输。
+   - Base64最早是用来解决电子邮件的传输问题。传统的电子邮件是1982年定下的技术规范，该规范的一个重要预留点,就是规定电子邮件只能使用ASCII可打印字符。而ASCII码的128~255都是不可见字符。在网络上交换数据的时候，经过不同路由设备,由于不同的设备对字符的处理方式有一些不同，就很有可能被错误处理,不利于传输。
    - 解决这个问题，最好的方法就是在不改变传统协议的情况下，做一种扩展方法来支持为二进制文件的传送，把不可打印字符也能用可打印字符来表示二进制数据。因此base64编码这种基于64个可打印字符来表示二进制数据的方法就诞生了。
 
     [ascii码表在线查询](https://www.litefeel.com/tools/ascii.php)
@@ -24,22 +24,22 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
 
     <img src="images/base64/index.jpg"> 
 
-   2. 三个字节的情况：base64将每3个8bits字节转换成4个6bit字节(3*8 = 4*6 =24),然后将转换后的6bit往高位添加2个0，组成4个8bit的字节,再根据这4个8bit的十进制在上面的索引表中查找对应的值,此时得到的结果就是base64的值了。
+   2. 三个字节的情况：base64将每3个8bits字节转换成4个6bit字节(3x8 = 4x6 =24),然后将转换后的6bit往高位添加2个0，组成4个8bit的字节,再根据这4个8bit的十进制在上面的索引表中查找对应的值,此时得到的结果就是base64的值了。
  
      因此,理论上，**转换后的字符串的长度要比原来的字符串长1/3,(8/24)**
 
     **举个例子**
 
-    先使用线上的[base64在线转码](http://tool.oschina.net/encrypt?type=3)工具,这个是怎么得到的呢？看下面步骤：
+   在[base64在线转码工具](http://tool.oschina.net/encrypt?type=3)中,可以直接看到'Ow!'转换成'T3ch',那这个是怎么转换的呢？下面细细说来:
 
     ```
         (1)字符串'Ow!'被拆分成3个8位的字节(0x4F, 0x77, 0x21);(十六进制表示)    
         (2)然后转化成二进制 01001111 01110111 00100001;
         (3)然后划分成6位的序列就是 010011 110111 011100 100001;
-        (4)每个6位都值都表示从0~63之间的数,010011=>19  110111=>55  011100=>28  100001=>33,对照base64的索引表,得到T3ch
+        (4)每个6位都值都表示从0~63之间的数,转化为十进制就是:010011=>19  110111=>55  011100=>28  100001=>33,对照base64的索引表,得到T3ch
     ```
 
-     在计算中的表现就是,首先,以3个8bits的字符为一组,针对每组数据,获取每个字符的ascii编码。然后,转化成对应的二进制,再把二进制划分成6位的的序列,每个6位的数值在转换的时候,将3字节的数据,先后放入一个24位的缓冲区(就是用来临时存放输入输出的存储器)中,先来的字节占高位。数据不足3字节的话，与缓冲器中剩下的bit用0补助。由于2^6 = 64,所以每6个bit为一个单位,对应某个可打印字符。
+     解读：首先,以3个8bits的字符为一组,针对每组数据,获取每个字符的ascii编码。然后,转化成对应的二进制,再把二进制划分成6位的的序列,每个6位的数值在转换的时候,先将3字节的数据,先后放入一个24位的缓冲区(就是用来临时存放输入输出东西的存储器)中,先来的字节占高位。数据不足3字节的话，与缓冲器中剩下的bit用0补助。由于2^6 = 64,所以每6个bit为一个单位,对应某个可打印字符。
 
    上面例子写成代码就是
    ```
@@ -54,7 +54,6 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
 			var binary = [];
 			for(var i = 0; i < str.length; i++) {
 				var binStr = str.charCodeAt(i).toString(2);     // 先将每一项转化为Unicode码,然后转化为二进制。
-				toEight(binStr);
 				binary.push(toEight(binStr));                            
 			}
 			var strArray = binary.join('').replace(/\B(?=(\d{6})+(?!\d))/g, ',').split(',');   // 数组成字符串再取6位,转成数组
@@ -70,13 +69,13 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
 		console.log('字符' + testStr + '最后得到的base64编码为' +  resultStr);
    ```
 
-   3. 那两个字节的情况就是，先转化为二进制，2个字节就转成16个二进制，然后按6位去拆分, 就是6 6 4,前面2个6位依然是在前面补两个0,然后最后1个4位就在最后也补2个0，就形成了3个8位, 然后再转成十进制,对比base64编码,就得出对应的编码了。注意这时候要在末尾补个**=**哦！
+   3. 那两个字节的情况就是，先转化为二进制，2个字节就转成16个bit，然后按6位去拆分, 就是6 6 4,前面2个6位依然是在前面补两个0,然后最后1个4位就在最后也补2个0，就形成了3个8位, 然后再转成十进制,对比base64编码,就得出对应的编码了。注意这时候要在末尾补个**=**哦！
 
     举个例子：
     ```
         (1)字符串'Ow'被拆分成2个8位的字节(0x4F, 0x77);(十六进制表示)    
         (2)然后转化成二进制 01001111 01110111;
-        (3)然后划分成6位的序列就是 010011 110111 11100;
+        (3)然后划分成6位的序列就是 010011 110111 0111;
         (4)按规则补成8位就是 00010011 00110111 00011100
         (5)每个8位二进制转化为十进制就是,00010011=>19  00110111=>55  00011100=>28,对照base64的索引表,得到T3c
         (6)最后补成四位就是T3c=
@@ -97,10 +96,10 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
    5. 那么中文应该怎么转化呢？
   
     其实汉字有多种编码,比如utf-8等等，每种编码对应的base64对应值都不一样，有gb2312，utf-8,gbk等，因为我们一般用的utf-8,接下来就以utf-8为例。
-    首先，‘严’的utf-8的编码是E4B8A5,(为什么是这样呢，可以根据base64参考，[utf-8编码](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)),那转换为二进制就是 1110 0100 1011 1000 1010 0101。然后将这个二进制字符串，按照3个字节的规则，转成一组32位的二进制就是： 00111001 00001011 00100010 00100101。相应的十进制就是57,11,34,37.对应的base64值就是5Lil
+    首先，‘严’的utf-8的编码是E4B8A5,(为什么是这样呢，可以根据base64参考，[utf-8编码](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)),那转换为二进制就是 1110 0100 1011 1000 1010 0101。然后将这个二进制字符串，按照3个字节的规则，先每6位分一次，然后前面加2个0,就形成一组32位的二进制： 00111001 00001011 00100010 00100101。相应的十进制就是57,11,34,37.对应的base64值就是5Lil
 
    6. URL安全的base64编码。
-   当标准的base64在URL中传输时,URL编辑器会把标准base64中的‘/’和‘+’字符变成形如‘%XX’的形式。而且%号在存入数据库时还需要进行转换。因为ANSI SQL中已将%号用作通配符。
+   当标准的base64在URL中传输时,URL编辑器会把标准base64中的‘/’和‘+’字符变成形如‘%XX’的形式。而且%号在存入数据库时还需要进行转换。因为SQL中已将%号用作通配符。
    这时就采用一种用户URL的改进base64编码,它不在末尾填充'='号，并将标准base64中的+和/改成了-和_,免去了URL编解码和数据库存储时所要作的转换。
 
    7. html5将图片转换成base64代码,base64可以放在url中使用,将图片转成base64,图片可以以字符编码的形式直接传递到客户端，而文件形式需要进行http请求。虽然会多1/3,但是通过gzip优化以后就差不多了。
@@ -116,101 +115,117 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
         decodeURIComponent(escape(window.atob(str)));   // 转成字符串。
     ```
 
-   9. 最后上base64的完整代码
+   9. 最后上base64转换的完整代码
     ```
         
-        var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        var base64DecodeChars = new Array(
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
-            52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
-            -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-            -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-            41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1);
+        (function (win, undefined) {
+		    var Base64 = function () {
+		        var base64hash = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+		        
+		        // btoa method
+		        function _btoa (s) {
+		            if (/([^\u0000-\u00ff])/.test(s)) {
+		                throw new Error('INVALID_CHARACTER_ERR');
+		            }    
+		            var i = 0,
+		                prev,
+		                ascii,
+		                mod,
+		                result = [];
 
-        var b64 = function base64encode(str) {
-            var out, i, len;
-            var c1, c2, c3;
-            len = str.length;
-            i = 0;
-            out = "";
-            while(i < len) {
-                c1 = str.charCodeAt(i++) & 0xff;
-                if(i == len) {
-                    out += base64EncodeChars.charAt(c1 >> 2);
-                    out += base64EncodeChars.charAt((c1 & 0x3) << 4);
-                    out += "==";
-                    break;
-                }
-                c2 = str.charCodeAt(i++);
-                if(i == len) {
-                    out += base64EncodeChars.charAt(c1 >> 2);
-                    out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-                    out += base64EncodeChars.charAt((c2 & 0xF) << 2);
-                    out += "=";
-                    break;
-                }
-                c3 = str.charCodeAt(i++);
-                out += base64EncodeChars.charAt(c1 >> 2);
-                out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-                out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6));
-                out += base64EncodeChars.charAt(c3 & 0x3F);
-            }
-            return out;
-        }
+		            while (i < s.length) {
+		                ascii = s.charCodeAt(i);
+		                mod = i % 3;
 
-        var data = function base64decode(str) {
-            var c1, c2, c3, c4;
-            var i, len, out;
+		                switch(mod) {
+		                    // 第一个6位只需要让8位二进制右移两位
+		                    case 0:
+		                        result.push(base64hash.charAt(ascii >> 2));
+		                        break;
+		                    //第二个6位 = 第一个8位的后两位 + 第二个8位的前4位
+		                    case 1:
+		                        result.push(base64hash.charAt((prev & 3) << 4 | (ascii >> 4)));
+		                        break;
+		                    //第三个6位 = 第二个8位的后4位 + 第三个8位的前2位
+		                    //第4个6位 = 第三个8位的后6位
+		                    case 2:
+		                        result.push(base64hash.charAt((prev & 0x0f) << 2 | (ascii >> 6)));
+		                        result.push(base64hash.charAt(ascii & 0x3f));
+		                        break;
+		                }
 
-            len = str.length;
-            i = 0;
-            out = "";
-            while(i < len) {
-            /* c1 */
-                do {
-                    c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-                } while(i < len && c1 == -1);
-                if(c1 == -1) break;
+		                prev = ascii;
+		                i ++;
+		            }
 
-                /* c2 */
-                do {
-                    c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
-                } while(i < len && c2 == -1);
-                if(c2 == -1) break;
+		            // 循环结束后看mod, 为0 证明需补3个6位，第一个为最后一个8位的最后两位后面补4个0。另外两个6位对应的是异常的“=”；
+		            // mod为1，证明还需补两个6位，一个是最后一个8位的后4位补两个0，另一个对应异常的“=”
+		            if(mod == 0) {
+		                result.push(base64hash.charAt((prev & 3) << 4));
+		                result.push('==');
+		            } else if (mod == 1) {
+		                result.push(base64hash.charAt((prev & 0x0f) << 2));
+		                result.push('=');
+		            }
 
-                out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
+		            return result.join('');
+		        }
 
-                /* c3 */
-                do {
-                    c3 = str.charCodeAt(i++) & 0xff;
-                if(c3 == 61)
-                    return out;
-                    c3 = base64DecodeChars[c3];
-                } while(i < len && c3 == -1);
-                if(c3 == -1) break;
+		        // atob method
+		        // 逆转encode的思路即可
+		        function _atob (s) {
+		            s = s.replace(/\s|=/g, '');
+		            var cur,
+		                prev,
+		                mod,
+		                i = 0,
+		                result = [];
 
-                out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
+		            while (i < s.length) {
+		                cur = base64hash.indexOf(s.charAt(i));
+		                mod = i % 4;
 
-                /* c4 */
-                do {
-                    c4 = str.charCodeAt(i++) & 0xff;
-                    if(c4 == 61) return out;
-                    c4 = base64DecodeChars[c4];
-                } while(i < len && c4 == -1);
-                if(c4 == -1) break;
-                out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
-            }
-            return out;
-        }
+		                switch (mod) {
+		                    case 0:
+		                        //TODO
+		                        break;
+		                    case 1:
+		                        result.push(String.fromCharCode(prev << 2 | cur >> 4));
+		                        break;
+		                    case 2:
+		                        result.push(String.fromCharCode((prev & 0x0f) << 4 | cur >> 2));
+		                        break;
+		                    case 3:
+		                        result.push(String.fromCharCode((prev & 3) << 6 | cur));
+		                        break;
+		                        
+		                }
 
-        对utf-8编码要用 sEncoded=base64encode(utf16to8(str)); 
-        对utf-8解码要用 sDecoded=utf8to16(base64decode(sEncoded));
+		                prev = cur;
+		                i ++;
+		            }
+
+		            return result.join('');
+		        }
+
+		        return {
+		            btoa: _btoa,
+		            atob: _atob,
+		            encode: _btoa,
+		            decode: _atob
+		        };
+		    }();
+
+		    if (!win.Base64) { win.Base64 = Base64 }
+		    if (!win.btoa) { win.btoa = Base64.btoa }
+		    if (!win.atob) { win.atob = Base64.atob }
+
+		})(window);
     ```
 
 ###### 四、base64的用途
 
    - 可用来作为电子邮件的传输编码。
-   - 处理文本数据的场合,表示传输、存储一些二进制数据，包括MIME的电子邮件及XML的一些复杂数据。在MIME格式
+   - 处理文本数据的场合,表示传输、存储一些二进制数据，包括MIME的电子邮件及XML的一些复杂数据。
+   - 可以将图片转化为base64进行传输。
+   - 等等。。。

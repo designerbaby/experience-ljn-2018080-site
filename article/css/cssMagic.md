@@ -14,6 +14,98 @@
             rgba(255, 0, 153) 71.4706%,
             rgba(0, 0, 0) 100%);
 
+* 用一个div做一层透明的遮罩
+
+    ```
+        .editer-shell::after{
+            content: "";
+            position:absolute;
+            pointer-events:none;
+            z-index: 1;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            box-shadow:0 0 0 9999px rgba(0,0,0,.5)
+        }
+    ```
+
+* 用css做一个类似slider的调音组件
+    ```
+        .tooltip{
+            position: relative;
+            &::before{
+            border: 5px solid transparent;
+            border-top-color:rgba(0,0,0,.7)
+        }
+        &::after{
+            content: attr(aria-label)
+        }
+        
+        <div class="tooltip" :aria-label="percent+'%'"></div>
+
+    ```
+    
+* input 框只弹数字键盘
+
+    ```
+        <input type="text"  pattern="[0-9]*"/>
+    ```
+
+* 文字描边
+
+    ```
+        文字描边的代码样式：
+        .editor-ele-text{
+            -webkit-text-fill-color: transparent;
+            -webkit-text-text-stroke: 1px #f00;
+        }
+
+    ```
+
+* 用css画网格
+
+    ```
+        .grid{
+            height: 450px;
+            width: 450px;
+            background-image:
+            linear-gradient(45deg,#bbb 25%,transparent 0),
+            linear-gradient(45deg,transparent 75%,#bbb0),
+            linear-gradient(45deg,#bbb 25%,transparent 0),
+            linear-gradient(45deg,transparent 75%,#bbb0);
+            background-position: 0 0 , 15px 15px, 15px 15px, 30px 30px;
+            background-size: 30px 30px 
+        }
+    ```
+
+* 用css做颜色拾取器
+
+    ```
+        .rainbow{
+            width:20px;
+            height: 15px;
+            background-image: linear-gradient(-180deg,#f00 0%,#f0f 15%,#00f 33%,#0ff 49%,#0f0 67%,#ff0 84%,#f00 100%,)
+        }
+    ```
+
+* line-height中一部分机型会往上移
+
+    ```     
+        整个div可以用下面布局：   
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+    ```
+* 让榜单在ios上滚动更平滑,参考链接[http://www.kittywei.com/smooth-scroll-on-ios-overflow-elements/](http://www.kittywei.com/smooth-scroll-on-ios-overflow-elements/)
+
+    ```
+        主要是加上 
+        overflow-y: scroll; /* 重点：必须是scroll而不是auto */
+        -webkit-overflow-scrolling: touch;/*关键*/
+    ```
+
 * 使用animation-timing-function: steps, 可以做一整张动画。 
   animation-timing-function 参数的运用参考[链接](https://idiotwu.me/understanding-css3-timing-function-steps/)
   在项目中的应用场景主要在页面中,原理就是一帧一帧地替换。然后用一张长图,去做成一个动画。
