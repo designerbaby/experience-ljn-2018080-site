@@ -102,7 +102,37 @@ base64对于前端来说并不陌生,在性能优化方面，base64经常被用�
    当标准的base64在URL中传输时,URL编辑器会把标准base64中的‘/’和‘+’字符变成形如‘%XX’的形式。而且%号在存入数据库时还需要进行转换。因为SQL中已将%号用作通配符。
    这时就采用一种用户URL的改进base64编码,它不在末尾填充'='号，并将标准base64中的+和/改成了-和_,免去了URL编解码和数据库存储时所要作的转换。
 
-   7. html5将图片转换成base64代码,base64可以放在url中使用,将图片转成base64,图片可以以字符编码的形式直接传递到客户端，而文件形式需要进行http请求。虽然会多1/3,但是通过gzip优化以后就差不多了。
+   7. html5将图片转换成base64代码,base64可以放在url中使用,将图片转成base64,图片可以以字符编码的形式直接传递到客户端，而文件形式需要进行http请求。虽然会多1/3,但是通过gzip优化以后就差不多了。在html5中,有一个接口[FileReader.readAsDataURL()](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL)。这个接口可以直接将文件转换为base64编码格式。。并以Data:URL的形式展现出来。示例代码如下：
+
+	```
+		<script>
+        window.onload = function () {
+            // 抓取上传图片，转换代码结果，显示图片的dom
+            var img_upload = document.getElementById("img_upload");
+            var base64_code = document.getElementById("base64_code");
+            var img_area = document.getElementById("img_area");
+            // 添加功能出发监听事件
+            img_upload.addEventListener('change', readFile, false);
+        }
+        function readFile() {
+            var file = this.files[0];
+            if (!/image\/\w+/.test(file.type)) {
+                alert("请确保文件为图像类型");
+                return false;
+            }
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                base64_code.innerHTML = this.result;
+                img_area.innerHTML = '<div>图片img标签展示：</div><img src="' + this.result + '" alt=""/>';
+            }
+        }
+		</script>
+		<input type="file" id="img_upload" />
+		<textarea id="base64_code" rows="30" cols="360"></textarea>
+		<p id="img_area"></p>
+
+	```
 
    8. js中有个办法window.btoa可以直接转换成base64,window.atob转成字符串。
     ```

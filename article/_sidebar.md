@@ -30,3 +30,5 @@
     * [带你走进base64的世界](/base64/link)
 * Jquery 📚
     * [ready和onload的区别](/jquery/ready)
+* 机器学习 📚
+    * [machine learning](/machineLearing/link)
