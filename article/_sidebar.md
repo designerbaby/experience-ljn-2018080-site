@@ -8,6 +8,9 @@
     * [面向对象之封装、继承、多态](/javascript/oo)
     * [原型和原型链](/javascript/prototype)
     * [对象的深度克隆](/javascript/clone)
+    * [跨站资源共享CORS](/javascript/cors)
+    * [跨站攻击](/javascript/cross)
+    * [HTTP的详细介绍](/javascript/http.md)
 * css 📚
     * [css Magic](/css/cssMagic)
     * [解剖background-size属性](/css/background-size)
@@ -32,3 +35,5 @@
     * [ready和onload的区别](/jquery/ready)
 * 机器学习 📚
     * [machine learning](/machineLearing/link)
+* parallax 📚
+    * [parallax使用介绍](/parallax/link)

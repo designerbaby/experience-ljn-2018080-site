@@ -1,5 +1,7 @@
 ##### 机器学习的世界
 
+    学习链接：[http://mooc.study.163.com/smartSpec/detail/1001358002.htm](http://mooc.study.163.com/smartSpec/detail/1001358002.htm)
+
 ###### 一、定义
 
    1. 机器学习： 计算机从数据中学习出规律及模式,以应用在新数据上做预测的任务。
