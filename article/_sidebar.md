@@ -19,18 +19,18 @@
     * [git常见命令](/git/git)
 * arithmetic 📚
     * [md5算法](/arithmetic/md5)
+    * [带你走进base64的世界](/arithmetic/base64)
 * mpVue 📚
     * [mpVue](/mpVue/mpVue)
 * regEx 📚
     * [正则表达式快速查找](/regEx/RegEx rule)
 * node.js 📚
     * [爬虫技术](/node.js/crawler)
+    * [初学node](/node.js/init)
 * other 📚
     * [Don't make me think](/other/link)
 * Emmet 📚
     * [Emmet 语法](/Emmet/link)
-* base64 📚
-    * [带你走进base64的世界](/base64/link)
 * Jquery 📚
     * [ready和onload的区别](/jquery/ready)
 * 机器学习 📚
