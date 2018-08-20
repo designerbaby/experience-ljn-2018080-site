@@ -1,20 +1,19 @@
-#### Vue.js 源码全方位解析---虚拟dom
+#### Vue.js 源码全方位解析---虚拟dom的实现
 
 ##### 一、dom是什么？
 
   - DOM = Document Object Mode，就是一个文档对象类型。DOM可以以一种独立于平台和语言的方式访问和修改一个文档的内容和结构。
-  - DOM实际上是以面向对象方式描述的文档模型。
+  - 真实的DOM 实际上是以面向对象方式描述的文档模型。
   - html本身就是一个dom, 平时用js操作html就是操作dom, HTML DOM 定义了所有 HTML 元素的对象和属性，以及访问它们的方法（接口）。
-  - 但是js操作dom,性能很低,为什么呢？因为dom本身很多属性，一修改dom.就会引发重排和重绘，就会比较慢
-  - dom的本身就是一棵树。
-  - document.createElement 就是操作dom。怎么操作的呢？
-  - 
-
-1、dom是什么？真实dom是什么，怎么操作dom，js的原生方法就是dom的操作方法
+  - 但是js操作dom,性能很低,为什么呢？因为dom本身很多属性，一修改dom, 比如调用document.createElement。就会引发重排和重绘，就会比较慢
+  - dom的本身就是一棵树，js的原生方法就是dom的操作方法
 
 ##### 二、虚拟dom是怎么实现的？
 
-   - Vitusl DOM就是用一个原生的JS对象去描述一个DOM节点,所以它比创建一个DOM的代价要小很多。
+   - Vitusl DOM 本质上就是用一个原生的JS对象去描述一个DOM节点,所以它比创建一个DOM的代价要小很多。
+   - 主要引入的是mvvm模式，让视图和状态进行绑定。状态变更了，视图自动变更，不用手动刷新页面。
+   - MVVM 的模式如下： 当ViewModal对Model进行更新的时候，Binder会自动把数据更新到View上去;当用户对View进行操作时，Binder也会自动把数据更新到Model上去，这种称为： Two-way data-binding, *双向数据绑定*。
+   -  <img src="images/vue/mvvm.png"> 
   
 
 2、虚拟dom是什么鬼，添加节点、创建虚拟的对象，对象有render方法，虚拟dom本身定义的方法
