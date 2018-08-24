@@ -13,8 +13,16 @@
    - Vitusl DOM 本质上就是用一个原生的JS对象去描述一个DOM节点,所以它比创建一个DOM的代价要小很多。
    - 主要引入的是mvvm模式，让视图和状态进行绑定。状态变更了，视图自动变更，不用手动刷新页面。
    - MVVM 的模式如下： 当ViewModal对Model进行更新的时候，Binder会自动把数据更新到View上去;当用户对View进行操作时，Binder也会自动把数据更新到Model上去，这种称为： Two-way data-binding, *双向数据绑定*。
-   -  <img src="images/vue/mvvm.png"> 
-  
+  <img src="images/vue/mvvm.png"> 
+   -  为什么要用Virtual dom?
+      -  DOM是很慢的。如果我们把一个简单的div元素的属性都打印出来，你会看到：
+      <img src="images/Vue/dom.png">
+   -  虚拟dom的算法步骤：
+      -  用 JavaScript 对象结构表示 DOM 树的结构；然后用这个树构建一个真正的 DOM 树，插到文档当中
+      -  当状态变更的时候，重新构造一棵新的对象树。然后用新的树和旧的树进行比较，记录两棵树差异
+      -  把所记录的差异应用到步骤1所构建的真正的DOM树上，视图就更新了
+   -  Virtual DOM 的本质：
+      -  在 JS 和 DOM 之间做了一个缓存。可以类比 CPU 和硬盘，既然硬盘这么慢，我们就在它们之间加个缓存：既然 DOM 这么慢，我们就在它们 JS 和 DOM 之间加个缓存。CPU（JS）只操作内存（Virtual DOM），最后的时候再把变更写入硬盘（DOM）。  
 
 2、虚拟dom是什么鬼，添加节点、创建虚拟的对象，对象有render方法，虚拟dom本身定义的方法
 ##### 三、Vue中是怎么实现虚拟dom的，和平常虚拟dom有什么区别？、
