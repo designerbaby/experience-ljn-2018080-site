@@ -11,3 +11,12 @@
         return year + '-' + month + '-' + day;
     }
 ```
+
+<img src="images/javascript/formatDate.png"> 
+
+<img src="images/javascript/formatTime.png"> 
+
+<img src="images/javascript/judge.png"> 
+
+<img src="images/javascript/random.png"> 
+
