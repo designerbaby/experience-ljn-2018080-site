@@ -49,3 +49,5 @@
     * [第四届Feday分享](/feday/index)
 * Webpack 📚
     * [webpack个人初体验](/webpack/index)
+* nginx 
+    * [nginx配置](/nginx/index)
