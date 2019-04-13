@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>test1</title>
+    <style>
+        .contain {
+            border: 1px solid black;
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            grid-gap: 1em;
+            grid-template-rows: 200px;
+            grid-template-areas: 
+                "a b c";
+        }
+        .contain .left {
+            grid-area: a;
+            border: 1px solid red;
+        }
+  
+        .contain .middle {
+            grid-area: b;
+            border: 1px solid yellow;
+        }
+
+        .contain .right {
+            grid-area: c;
+            border: 1px solid blue;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="contain">
+        <div class="left">left</div>
+        <div class="middle">middle</div>
+        <div class="right">right</div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>test</title>
+        <style>
+            .contain {
+                border: 1px solid black;
+                display: flex;
+            }
+
+            .left {
+                background-color: red;
+                display: inline-block;
+                float: left;
+                flex-grow: 1;
+                height: 200px;
+                order: -1;
+                flex: 0 1 200px;
+                margin-right: 20px;
+                border: 1px solid red;
+            }
+        
+            .middle {
+                background-color: yellow;
+                flex-grow: 1;
+                height: 200px;
+                border: 1px solid yellow;
+            }
+        
+            .right {
+                background-color: blue;
+                flex: 0 1 100px;
+                margin-left: 20px;
+                height: 200px;
+                border: 1px solid blue;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="contain">
+            <div class="left" id="left" draggable="true">
+                <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttest</p>
+            </div>
+            <div class="middle" id="middle" draggable="true">
+                <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestt</p>
+            </div>
+            <div class="right" id="right" draggable="true">
+                <p>testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestt</p>
+            </div>
+        </div>
+    </body>
+    <script>
+        var left = document.getElementById('left')
+        var right = document.getElementById('right')
+        var middle = document.getElementById('middle')
+        console.log('left:', left)
+        console.log('right:', right)
+        console.log('middle:', middle)
+        left.ondragstart = dragStart
+        left.ondrag = onDrag
+        left.ondragend = dragEnd
+        function dragStart () {
+            console.log('拖动开始')
+        }
+        function onDrag () {
+            console.log('拖动中')
+        }
+        function dragEnd () {
+            console.log('拖动结束')
+        }
+        // left.addEventListener('')
+    </script>
+</html>
