@@ -51,3 +51,7 @@
     * [webpack个人初体验](/webpack/index)
 * nginx 
     * [nginx配置](/nginx/index)
+* linux
+    * [shell命令](/linux/shell)
+* ffmpeg
+    * [ffmpeg参数](/ffmpeg/index.md)
