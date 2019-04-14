@@ -176,3 +176,4 @@
   - vue-mark-display npm链接：https://www.npmjs.com/package/vue-mark-display,
 
   - vue-mark-display 地址： https://github.com/jinjiang/vue-mark-display
+  - 动画时间分隔300ms的由来： https://www.mdui.org/design/motion/duration-easing.html#
